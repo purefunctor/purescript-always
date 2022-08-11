@@ -2,8 +2,8 @@ module Always where
 
 import Prelude
 
-import Always.Leibniz (type (~), coerce, refl)
 import Control.Apply (lift2)
+import Data.Leibniz (type (~), Leibniz(..), coerce)
 
 newtype Always :: (Type -> Type) -> Type -> Type
 newtype Always m a = Always (m a)
@@ -14,7 +14,7 @@ derive newtype instance Applicative m => Applicative (Always m)
 derive newtype instance Bind m => Bind (Always m)
 derive newtype instance Monad m => Monad (Always m)
 
-instance (Applicative m, Semigroup a) => Semigroup (Always m a) where
+instance (Apply m, Semigroup a) => Semigroup (Always m a) where
   append = lift2 append
 
 instance (Applicative m, Monoid a) => Monoid (Always m a) where
@@ -27,7 +27,7 @@ always :: forall m a. m a -> Always m a
 always = Always
 
 yes :: forall a. AlwaysProof a a
-yes = Yes refl
+yes = Yes (Leibniz identity)
 
 yesn't :: forall a b. AlwaysProof a b
 yesn't = Yesn't
