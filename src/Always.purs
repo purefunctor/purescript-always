@@ -3,6 +3,7 @@ module Always where
 import Prelude
 
 import Control.Apply (lift2)
+import Control.Monad.ST.Class (class MonadST)
 import Data.Leibniz (type (~), Leibniz(..), coerce)
 
 newtype Always :: (Type -> Type) -> Type -> Type
@@ -13,6 +14,7 @@ derive newtype instance Apply m => Apply (Always m)
 derive newtype instance Applicative m => Applicative (Always m)
 derive newtype instance Bind m => Bind (Always m)
 derive newtype instance Monad m => Monad (Always m)
+derive newtype instance MonadST s m => MonadST s (Always m)
 
 instance (Apply m, Semigroup a) => Semigroup (Always m a) where
   append = lift2 append
