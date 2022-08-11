@@ -20,7 +20,8 @@ alwaysEvent = unsafeUnwrapEvent >>> dimap (map (unalways yes)) (map always <<< a
     :: forall a. ((a -> Always m Unit) -> Always m (Always m Unit)) -> AnEvent (Always m) a
   unsafeWrapEvent = unsafeCoerce
 
-unalwaysEvent :: forall m n. Monad m => Monad n => AlwaysProof m n -> AnEvent (Always m) ~> AnEvent n
+unalwaysEvent
+  :: forall m n. Monad m => Monad n => AlwaysProof m n -> AnEvent (Always m) ~> AnEvent n
 unalwaysEvent proof = unsafeUnwrapEvent >>> dimap asAlways asBase >>> unsafeWrapEvent
   where
   asAlways :: forall a. (a -> n Unit) -> a -> Always m Unit
